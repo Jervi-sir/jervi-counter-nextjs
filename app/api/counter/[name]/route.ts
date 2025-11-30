@@ -1,35 +1,23 @@
-// app/api/counter/[name]/route.ts
 import { NextRequest } from "next/server";
 import { redis } from "@/lib/redis";
 
-export const runtime = "edge"; // runs on edge, fast + cheap
+export const runtime = "edge";
 
-type RouteParams = {
-  params: { name: string };
-};
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ name: string }> }
+) {
+  const { name: rawName } = await params;
 
-export async function GET(req: NextRequest, { params }: RouteParams) {
-  const rawName = params.name || "default";
-
-  // normalize / clamp length just to be safe
-  const name = rawName.slice(0, 64);
-
+  const name = (rawName ?? "default").slice(0, 64);
   const searchParams = req.nextUrl.searchParams;
 
-  // You can extend these later to support themes/padding/etc like original repo
   const theme = searchParams.get("theme") ?? "simple";
-
   const key = `counter:${name}`;
 
-  // increment global counter
   const count = await redis.incr(key);
 
-  // simple SVG for now; later you can do fancy digit images like Moe-Counter
-  const svg = buildSvg({
-    name,
-    count,
-    theme,
-  });
+  const svg = buildSvg({ name, count, theme });
 
   return new Response(svg, {
     status: 200,
@@ -49,7 +37,6 @@ function buildSvg({
   count: number;
   theme: string;
 }) {
-  // tweak styles however you like
   const label = `${name}`;
   const value = count.toString();
 
@@ -75,7 +62,7 @@ function buildSvg({
     ${escapeXml(value)}
   </text>
 </svg>
-`.trim();
+  `.trim();
 }
 
 function escapeXml(str: string) {
