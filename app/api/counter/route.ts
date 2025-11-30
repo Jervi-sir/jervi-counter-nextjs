@@ -7,8 +7,6 @@ export const runtime = "edge";
 // Your one and only "username"
 const COUNTER_NAME = "Jervi-sir";
 
-// ![](https://your-app.vercel.app/api/counter?theme=3d-num)
-
 export async function GET(req: NextRequest) {
   const url = req.nextUrl;
   const searchParams = url.searchParams;
@@ -72,7 +70,7 @@ function buildSimpleBadgeSvg({
   const label = name; // "Jervi-sir"
   const value = count.toString();
 
-  const width = 220;
+  const width = 180;
   const height = 32;
 
   const bgColor = theme === "dark" ? "#111827" : "#111827";
@@ -80,22 +78,44 @@ function buildSimpleBadgeSvg({
   const accentColor = "#10B981";
 
   return `
-<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label} ${value}">
+<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
+     fill="none" xmlns="http://www.w3.org/2000/svg"
+     role="img" aria-label="${label} ${value}">
+     
   <title>${label} counter</title>
+
+  <!-- background -->
   <rect width="${width}" height="${height}" rx="6" fill="${bgColor}" />
-  <rect x="0" y="0" width="120" height="${height}" rx="6" fill="rgba(15,23,42,0.9)" />
-  <rect x="120" y="0" width="${width - 120}" height="${height}" rx="6" fill="${accentColor}" />
 
-  <text x="10" y="20" fill="${textColor}" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12">
-    ${escapeXml(label)}
-  </text>
+  <!-- left highlighted area (value zone) -->
+  <rect x="0" y="0" width="100" height="${height}" rx="6" fill="${accentColor}" />
 
-  <text x="${width - 10}" y="20" fill="${textColor}" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="14" text-anchor="end">
+  <!-- right zone (label zone) -->
+  <rect x="100" y="0" width="${width - 100}" height="${height}" rx="6" fill="rgba(15,23,42,0.9)" />
+
+  <!-- VALUE on the LEFT -->
+  <text x="90" y="20"
+    fill="${textColor}"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+    font-size="14"
+    text-anchor="end">
     ${escapeXml(value)}
   </text>
+
+  <!-- LABEL on the RIGHT -->
+  <text x="${width - 10}" y="20"
+    fill="${textColor}"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    text-anchor="end">
+    ${escapeXml("nth visitor")}
+  </text>
+
 </svg>
   `.trim();
 }
+
+
 
 /* ------------------ Image digits SVG ------------------ */
 
