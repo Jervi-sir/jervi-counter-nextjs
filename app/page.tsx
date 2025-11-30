@@ -26,7 +26,7 @@ export default function HomePage() {
       </p>
 
       <pre className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm mb-4 w-full max-w-xl overflow-x-auto">
-        <code>{`![](https://your-app.vercel.app/api/counter/jervi)`}</code>
+        <code>{`![](https://jervi-counter.vercel.app/api/counter?theme=3d-num)`}</code>
       </pre>
 
       <p className="text-slate-300 mb-2">
