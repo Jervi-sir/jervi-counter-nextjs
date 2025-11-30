@@ -1,7 +1,9 @@
 // lib/redis.ts
-import { Redis } from "@upstash/redis";
+import { kv } from "@vercel/kv";
 
-export const redis = Redis.fromEnv();
-// requires env vars:
-// UPSTASH_REDIS_REST_URL
-// UPSTASH_REDIS_REST_TOKEN
+export async function incrementCounter(name: string): Promise<number> {
+  const key = `counter:${name}`;
+  // increments and returns the new value
+  const value = await kv.incr(key);
+  return value;
+}
